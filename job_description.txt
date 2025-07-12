@@ -1,0 +1,13 @@
+We are seeking a highly motivated and analytical Data Analyst Intern to join our Insights & Analytics team. This position is ideal for someone passionate about data, storytelling, and solving business problems using data-driven solutions.
+
+🛠️ Responsibilities:
+Collect, clean, and analyze structured and unstructured data from internal databases and APIs
+
+Use SQL and Python (Pandas, NumPy) to build reports and analyze KPIs
+
+Create interactive dashboards using Tableau or Power BI
+
+Support ad hoc reporting requests for cross-functional teams
+
+Collaborate with product, engineering, and business teams to drive data-led decisions
+

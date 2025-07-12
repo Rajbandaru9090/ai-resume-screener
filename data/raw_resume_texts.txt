@@ -1,0 +1,117 @@
+
+
+=== raj resume.docx ===
+
+BANDARU RAJU
+                                                       5-2-55/4/2/c,Seven hills road no1,Sai baba Temple,Mahabubabad,Telangana,506101,India
+Mobile No: +91 7995138633|Email ID: rajubandaru1818@gmail.com
+
+SUMMARY
+
+Final-year IT student with a passion for Python programming. I'm eager to use my skills in technology and creativity in a professional setting.
+
+EDUCATION
+
+B.Tech (Computer Science and Engineering)	2020-2024
+Sreenidhi Institute of Science and Technology, Hyderabad. CGPA : 6.67
+Intermediate (MPC)	2018-2020
+Narayana Junior College, Hyderabad . Percentage : 96.4%
+SSC	2018
+Sparkrill International school   Percentage : 85%
+PROJECTS
+DEPLOYMENT OF SMART CONTRACT FORCROWDFUNDING	
+The design and deployment of smart contracts leveraging blockchain technology, fostering a distributed ledger system that transparently tracks financial transactions across a decentralized network of interconnected computational nodes.	
+Cardiovascular Risk Assessment via Machine Learning
+The meticulous analysis of extensive medical datasets to forecast the onset of heart diseases through the strategic implementation of advanced algorithmic paradigms. 
+
+SUMMER INTERNSHIP
+AWS Academy Graduate - AWS Academy Data Analytic
+AWS Academy Graduate - AWS Academy Machine Learning Foundations
+Internshala- Python Programming 
+AREA OF INTEREST
+ Languages: Python, Java 
+ Database Management System: My SQL 
+ Operating Systems: Microsoft Office, Windows 
+
+ 
+
+
+ TECHNICAL SKILLS                                                    
+. PYTHON
+. SQL
+. OOPS
+. HTMLand CSS
+
+Achievements
+National Tennis Bronzemedal SCORES
+     IELTS - 7.
+         GRE - 308
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=== resume 1.docx ===
+Bandaru Raju
++1 3059541077 | rajbandaru1201@gmail.com | https://www.linkedin.com/in/raju-bandaru-216209337
+Summary
+
+
+Software Engineering Intern with foundational experience in front-end development. Proven ability in designing responsive and interactive user interfaces using HTML, CSS, and JavaScript. Engineered optimized web components to significantly improve site performance and user engagement. Eager to apply technical skills to create customer-focused experiences in a collaborative environment.
+
+Skills
+
+
+Computer Languages: Python, C/C++, Java, JavaScript
+Statistics and Data: Excel, MySQL, Spark-SQL, Hive, Apache Hadoop
+Coursework with a strong foundation in: Data structures and algorithms, Software Engineering, Machine learning, Distributed systems, Web development, Operating Systems, Database systems, Artificial intelligence
+Web Development: HTML, CSS
+Additional Skills: Proficient in Microsoft Excel, Powerpoint, REST API
+
+Work Experience
+
+
+Zensar Technologies	Hyderabad, India
+Front End development Intern	Mar 2024 - Jul 2024
+Spearheaded front-end development of a key project, designing responsive and interactive user interfaces that boosted customer experience and engagement using React, HTML, and CSS.
+Engineered and optimized web components using HTML, CSS, JavaScript, and REST APIs, enhancing site functionality and achieving significant improvements in performance.
+Enhanced data handling processes by integrating JavaScript with front-end technologies, resulting in a more responsive application that improved user interactions across active users.
+Managed full development lifecycle, overseeing design, coding, testing, and debugging to successfully drive projects to completion efficiently.
+
+Projects	
+Deployment of Smart Contract for Crowdfunding	Dec 2023 - Mar 2024
+Designed and deployed Ethereum-based smart contracts using Solidity to enable secure and transparent crowdfunding transactions on a distributed ledger system.
+Utilized WebJS for blockchain interaction and MetaMask for wallet integration and transaction validation, simulating decentralized deployment with Ganache and coding in Remix IDE
+Integrated MySQL to log transaction records for backup and Excel for data analysis of funding patterns, Applied knowledge from Distributed Systems and Database Systems courses to manage the decentralized structure and ensure data integrity across nodes.
+	
+Cardiovascular Risk Assessment via Machine Learning	Aug 2023 - Nov 2023
+Performed comprehensive analysis of medical datasets to predict heart disease risks, utilizing Python and libraries such as TensorFlow and Scikit-Learn to implement Artificial Neural Networks (ANN) and Random Forest algorithms
+Stored and processed large datasets using Apache Hadoop and Hive to streamline the analysis and trained models
+Leveraged Spark-SQL for handling complex queries with Excel for preliminary data exploration and visualization
+Applied principles from Machine Learning and Data Structures and Algorithms coursework to achieve optimized model performance
+
+Education
+
+
+Florida Atlantic University, Boca Raton	
+Master of Science, Computer Science	Expected Graduation :  May 2026
+Achievements: GPA: 3.8/4.0
+Sreenidhi Institute of Science and Technology, Hyderabad
+Bachelors of Science , Information Technology
+
+Certifications
+
+
+Certified AWS Academy Graduate in 'Machine Learning Foundations': Nov 2023(Machine learning)
+Certified AWS Academy Graduate in 'Cloud Foundations': Feb 2024 (Data Analytics)
+
