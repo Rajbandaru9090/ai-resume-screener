@@ -1,6 +1,6 @@
 
 # 🤖 AI-Powered Resume Screener (GPT + Streamlit)
-
+https://ai-resume-screener-gkoqrvoaywyqr39qmxqrtt.streamlit.app/
 This project is an intelligent resume screening web app powered by OpenAI GPT models. It allows you to upload multiple resumes and a job description, then automatically scores and ranks candidates based on their fit for the job — all in a clean and interactive Streamlit interface.
 
 ---
