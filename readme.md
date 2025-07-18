@@ -1,89 +1,61 @@
-AI-Powered Resume Screener (GPT + Streamlit)
+# 🧠 AI Resume Screener with GPT-4 | Skill Match, Visual Analysis, Batch Scoring
 
-This project is an intelligent resume screening web app powered by OpenAI GPT models. It allows you to upload multiple resumes and a job description, then automatically scores and ranks candidates based on their fit for the job — all in a clean and interactive Streamlit interface.
+[![Streamlit](https://img.shields.io/badge/Live_App-Open-green?logo=streamlit)](https://your-streamlit-link.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-
-
-Demo Features
-
- 1.Paste or upload a **job description**
- 2.Upload candidate **resumes (PDF or text)**
- 3.Run **GPT-based resume scoring** using `rank.py`
- 4.Upload the generated **ranked CSV** and explore results
- 5.Filter candidates by **fit score threshold**
- 6.View detailed **GPT summaries** for each match
- 7.Download final **ranked CSV** of all candidates
-
-
- How It Works
-
-1. **Paste a job description** inside the app.
-2. rank.py uses GPT-3.5/4 to:
-   - Read resumes
-   - Compare skills, experience, keywords with JD
-   - Score each candidate (0–10)
-   - Generate a summary explaining the score
-3. Upload the generated `ranked\_resumes\_gpt.csv` back into the app.
-4. View results in table form with filters and download options.
-
-
-GPT Prompting Logic (inside rank.py)
-
-Each resume is matched to the JD using structured GPT prompts like:
-
-You're a technical recruiter. Score the following resume out of 10 based on this job description.
-Then explain in 1-2 lines why this candidate fits or doesn't.
-
-Job Description:
-
-Resume:
-
-
-Return JSON like: {"score": 8.5, "reason": "Strong Python and AWS experience"}
-
-
- Tech Stack
-
-| Layer       | Tech Used                |
-|------------|--------------------------|
-| UI         | Streamlit                |
-| AI Model   | OpenAI GPT (via API)     |
-| Backend    | Python (subprocess, pandas) |
-| Data Files | CSV + TXT/PDF Resumes    |
-| Auth       | .env for API Key       |
+**An AI-powered Resume Screener** that uses OpenAI GPT to match multiple resumes to a given job description, analyze skill match, and generate smart visual insights. Built for recruiters and candidates to save hours of manual screening time.
 
 ---
 
- Installation & Running
+## 🎯 What It Does
 
- 1. Clone the repo:
-git clone https://github.com/your-username/ai-resume-screener.git
-cd ai-resume-screener
-
-2. Install requirements:
-pip install -r requirements.txt
-
-3. Add your `.env` file with:
-OPENAI_API_KEY=sk-...
-
-4. Launch the app:
-python -m streamlit run streamlit_app.py
+✅ Upload multiple **PDF / DOCX / TXT resumes**  
+✅ Paste any **Job Description (JD)**  
+✅ GPT-4 compares **skills, experience, and keywords**  
+✅ Outputs:
+- 🔢 Smart match **score**
+- 🧠 **Explanation** for each score
+- 📊 **Skill match heatmap / radar chart**
+- 🧾 **Filterable match table** (matched/missing skills)
+- 📥 **Download CSV** of all results  
+✅ Works on **batch** of resumes (up to 10+ in one go)
 
 
+## 🛠️ Tech Stack
 
- Output Example
+| Layer     | Tools Used                            |
+|-----------|----------------------------------------|
+| Backend   | OpenAI GPT-4 API, Python               |
+| Frontend  | Streamlit, Plotly, pandas              |
+| Parsing   | PyMuPDF, python-docx, os, re           |
+| Visuals   | Plotly (Radar/Heatmap), Streamlit UI   |
+| Export    | pandas to_csv, DataFrames              |
+| Hosting   | Streamlit Cloud / Local Deployment     |
 
-After GPT processing, your `ranked\_resumes\_gpt.csv` will look like:
 
-| name        | fit_score | gpt_summary                           |
-|-------------|-----------|----------------------------------------|
-| Alice Singh | 8.5       | Strong experience in Python & SQL      |
-| Bob Patel   | 5.0       | Lacks ML skills but has cloud exposure |
+---
+
+## 🧠 GPT Logic
+
+> _“Score each resume from 0–100 based on how well it matches this JD. Output the matched skills, missing skills, and justification for your score.”_
+
+The system parses resumes, extracts text, and prompts **OpenAI GPT-4** to generate:
+- A **match score**
+- **Matched/missing skills**
+- A natural language **explanation**
+- Skill insights for visualization
+
+---
+
+## 📊 Visuals
+
+- ✅ **Radar Chart** of skill match
+- ✅ **Bar/Heatmap** of match scores
+- ✅ **Interactive Table** with filters and highlights
+- ✅ Export to **CSV**
 
 
- Use Cases
 
-- Fast internal resume screening
-- Shortlisting candidates for internships/jobs
-- Educational tool for job matching automation
-- HR tech demo for startups
+
+
+
