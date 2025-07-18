@@ -1,6 +1,6 @@
 # 🧠 AI Resume Screener with GPT-4 | Skill Match, Visual Analysis, Batch Scoring
 
-[![Streamlit](https://img.shields.io/badge/Live_App-Open-green?logo=streamlit)](https://your-streamlit-link.com)
+[![Streamlit](https://img.shields.io/badge/Live_App-Open-green?logo=streamlit)]("https://ai-resume-screener-gkoqrvoaywyqr39qmxqrtt.streamlit.app/")
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **An AI-powered Resume Screener** that uses OpenAI GPT to match multiple resumes to a given job description, analyze skill match, and generate smart visual insights. Built for recruiters and candidates to save hours of manual screening time.
