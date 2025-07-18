@@ -1,117 +1,184 @@
 import streamlit as st
 import pandas as pd
-import subprocess
-import os
+import openai
+import pdfplumber
+import docx2txt
+import plotly.graph_objects as go
+from datetime import datetime
+import re
+import json
+from sklearn.feature_extraction.text import CountVectorizer
 
-# ---------------------------
-# 📌 PAGE CONFIGURATION
-# ---------------------------
-st.set_page_config(page_title="AI Resume Screener", layout="wide")
+# ========== 🔐 LOAD API KEY FROM SECRETS ==========
+openai.api_key = st.secrets["openai_api_key"]
 
-st.title("🤖 AI-Powered Resume Screener")
+# ========== ⚙️ PAGE CONFIG ==========
+st.set_page_config(page_title="🧠 AI Resume Screener (Dark Theme)", layout="wide", page_icon="🧬")
+st.markdown("""
+    <style>
+    body, .main, .block-container {
+        background-color: #1e1e1e;
+        color: white;
+    }
+    .stTextInput > div > div > input {
+        background-color: #333333;
+        color: white;
+    }
+    .stTextArea textarea {
+        background-color: #333333;
+        color: white;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# ---------------------------
-# 📄 JOB DESCRIPTION INPUT
-# ---------------------------
+st.title("🧠 AI Resume Screener (Advanced + Visual AI)")
+
+# ========== 📄 JOB DESCRIPTION ==========
 st.subheader("📄 Job Description")
 job_description = st.text_area(
-    "Paste the job description here (required to compute fit scores):",
+    "Paste the job description here:",
     height=200,
-    placeholder="Enter the responsibilities, skills, and qualifications here..."
+    placeholder="Paste responsibilities, qualifications, and required skills..."
 )
 
-# Save JD to file
-jd_path = "job_description.txt"
-if job_description.strip():
-    with open(jd_path, "w", encoding="utf-8") as f:
-        f.write(job_description)
-    st.success("✅ Job description received and saved.")
-else:
-    st.warning("⚠️ Please enter a job description before continuing.")
+# ========== 📤 RESUME UPLOAD ==========
+st.subheader("📤 Upload Resumes (PDF, DOCX, or TXT)")
+uploaded_files = st.file_uploader(
+    "Upload resumes:",
+    type=["pdf", "docx", "txt"],
+    accept_multiple_files=True
+)
 
-# ---------------------------
-# 🧠 RUN GPT RANKING PIPELINE
-# ---------------------------
-if job_description.strip():
-    if st.button("🔁 Run Resume Ranking (GPT)"):
-        with st.spinner("Running GPT-based ranking pipeline..."):
-            result = subprocess.run(["python", "rank.py", jd_path], capture_output=True, text=True)
+# ========== 📥 TEXT EXTRACTION ==========
+def extract_text(file):
+    if file.name.endswith(".pdf"):
+        with pdfplumber.open(file) as pdf:
+            return "\n".join(page.extract_text() or "" for page in pdf.pages)
+    elif file.name.endswith(".docx"):
+        return docx2txt.process(file)
+    elif file.name.endswith(".txt"):
+        return file.read().decode("utf-8")
+    return ""
 
-        if result.returncode == 0:
-            st.success("✅ Resume ranking completed! Upload the new ranked CSV below.")
-            st.code(result.stdout)
-        else:
-            st.error("❌ GPT scoring failed.")
-            st.code(result.stderr)
+resume_data = []
+if uploaded_files:
+    for file in uploaded_files:
+        text = extract_text(file)
+        resume_data.append({"filename": file.name, "text": text})
 
-# ---------------------------
-# 📤 UPLOAD RANKED CSV
-# ---------------------------
-st.markdown("### 📁 Upload ranked_resumes_gpt.csv to view results")
-uploaded_file = st.file_uploader("Upload your ranked_resumes_gpt.csv", type=["csv"])
+# ========== 🔍 EXTRACT SKILLS ==========
+def extract_keywords(text, top_n=10):
+    text = re.sub(r"[^a-zA-Z ]", "", text)
+    vectorizer = CountVectorizer(stop_words='english', max_features=top_n)
+    vecs = vectorizer.fit_transform([text])
+    return vectorizer.get_feature_names_out()
 
-if uploaded_file is not None:
-    # ---------------------------
-    # 📊 DATA LOADING
-    # ---------------------------
-    df = pd.read_csv(uploaded_file)
+# ========== 🤖 GPT SCORING ==========
+def score_resume_with_gpt(resume_text, job_desc):
+    job_keywords = extract_keywords(job_desc, top_n=15)
+    resume_keywords = extract_keywords(resume_text, top_n=30)
+    matched = list(set(job_keywords) & set(resume_keywords))
+    missing = list(set(job_keywords) - set(resume_keywords))
 
-    # Rename columns if needed
-    df.rename(columns={
-        "Name": "name",
-        "Score": "fit_score",
-        "Reason": "gpt_summary"
-    }, inplace=True)
+    prompt = f"""
+You are a senior AI hiring assistant. Evaluate the following resume in relation to the provided job description.
 
-    # ---------------------------
-    # 📈 OVERVIEW STATS
-    # ---------------------------
-    st.subheader("📊 Overview")
-    st.markdown(f"**Total Candidates:** {len(df)}")
-    st.markdown(f"**Columns Available:** {', '.join(df.columns)}")
+Provide the following in detailed JSON:
+1. A **score out of 10** based on how many job skills match the resume.
+2. A **5-sentence summary** highlighting:
+   - Clear skill matches with examples
+   - Major mismatches
+   - Specific tools or projects mentioned
+   - Relevance to job role
+   - Overall verdict
+3. A list of matched skills
+4. A list of missing skills
 
-    # ---------------------------
-    # 🔍 FILTERING BY SCORE
-    # ---------------------------
-    df_sorted = df.sort_values(by="fit_score", ascending=False).reset_index(drop=True)
+Respond in this JSON format:
+{{
+  "score": 7.5,
+  "reason": "...5 detailed sentences...",
+  "matched_skills": ["python", "sql"],
+  "missing_skills": ["aws", "docker"]
+}}
 
-    st.subheader("🔍 Filter Candidates by Fit Score")
-    min_score = st.slider("Minimum Fit Score", min_value=0.0, max_value=10.0, value=5.0, step=0.5)
-    df_filtered = df_sorted[df_sorted["fit_score"] >= min_score]
+### JOB KEYWORDS:
+{', '.join(job_keywords)}
 
-    # ---------------------------
-    # 📋 DISPLAY TOP MATCHES
-    # ---------------------------
-    st.subheader("📋 Top Candidates")
-    st.dataframe(df_filtered[["name", "fit_score", "gpt_summary"]], use_container_width=True)
+### RESUME KEYWORDS:
+{', '.join(resume_keywords)}
+"""
 
-    # ---------------------------
-    # 🔎 CANDIDATE DETAIL VIEW
-    # ---------------------------
-    if len(df_filtered) > 0:
-        st.subheader("🔎 Candidate Details")
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.4
+        )
+        reply = response.choices[0].message.content
+        result = json.loads(reply.strip())
+        return result["score"], result["reason"], result["matched_skills"], result["missing_skills"]
+    except Exception as e:
+        return 0, f"Error: {e}", [], []
 
-        selected_index = st.selectbox("Select a candidate to view more:", df_filtered.index)
-        candidate = df_filtered.loc[selected_index]
+# ========== 🧠 SCORING ==========
+if st.button("🚀 Run Resume Fit Evaluation") and job_description and resume_data:
+    results = []
+    progress = st.progress(0)
+    for i, r in enumerate(resume_data):
+        score, reason, matched, missing = score_resume_with_gpt(r["text"], job_description)
+        results.append({
+            "name": r["filename"],
+            "fit_score": round(score, 2),
+            "gpt_summary": reason,
+            "matched_skills": ", ".join(matched),
+            "missing_skills": ", ".join(missing),
+            "matched_list": matched,
+            "missing_list": missing
+        })
+        progress.progress((i + 1) / len(resume_data))
 
-        st.markdown(f"**👤 Name:** {candidate['name']}")
-        st.markdown(f"**✅ Fit Score:** {round(candidate['fit_score'], 2)}")
-        st.markdown("**💬 GPT Summary:**")
-        st.info(candidate['gpt_summary'])
-    else:
-        st.info("No candidates match the current fit score threshold.")
+    df = pd.DataFrame(results).sort_values(by="fit_score", ascending=False).reset_index(drop=True)
 
-    # ---------------------------
-    # 📥 DOWNLOAD CSV
-    # ---------------------------
-    st.subheader("⬇️ Download Ranked Results")
-    csv = df_sorted.to_csv(index=False).encode("utf-8")
+    st.success("✅ Resume analysis complete!")
+    st.subheader("📊 Candidate Overview")
+    st.dataframe(df[["name", "fit_score", "matched_skills", "missing_skills"]], use_container_width=True)
+
+    st.subheader("🧠 GPT Summary")
+    for _, row in df.iterrows():
+        with st.expander(f"{row['name']} — Score: {row['fit_score']}"):
+            st.markdown(f"**Matched Skills:** {row['matched_skills']}")
+            st.markdown(f"**Missing Skills:** {row['missing_skills']}")
+            st.info(row["gpt_summary"])
+
+    # ========== 📈 Radar Charts ==========
+    st.subheader("📌 Skill Match Radar Visualization")
+    for index, row in df.iterrows():
+        skills = list(set(row["matched_list"] + row["missing_list"]))
+        values = [1 if skill in row["matched_list"] else 0 for skill in skills]
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatterpolar(
+            r=values,
+            theta=skills,
+            fill='toself',
+            name=row['name']
+        ))
+        fig.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
+            showlegend=True,
+            title=f"Skill Radar for {row['name']}",
+            paper_bgcolor='#1e1e1e',
+            font_color='white'
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+    # ========== 📥 DOWNLOAD ==========
     st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name="ranked_resumes_gpt.csv",
+        label="⬇️ Download Ranked Results",
+        data=df.to_csv(index=False).encode("utf-8"),
+        file_name=f"ranked_resumes_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
         mime="text/csv"
     )
-
 else:
-    st.info("👆 Please upload the `ranked_resumes_gpt.csv` file generated after GPT scoring.")
+    st.warning("Please enter a job description and upload resumes to continue.")
