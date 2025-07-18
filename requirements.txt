@@ -7,3 +7,5 @@ matplotlib
 scikit-learn
 python-dotenv
 PyMuPDF
+pdfplumber
+plotly
